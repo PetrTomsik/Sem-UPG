@@ -1,6 +1,7 @@
 
 import java.awt.Color;
 
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -24,13 +25,18 @@ import org.jfree.data.xy.XYSeriesCollection;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.w3c.dom.css.RGBColor;
+
 import com.sun.org.apache.bcel.internal.classfile.PMGClass;
+import com.sun.webkit.dom.RGBColorImpl;
 
 import waterflowsim.Cell;
 import waterflowsim.Simulator;
 import waterflowsim.Vector2D;
 import waterflowsim.WaterSourceUpdater;
 
+
+import waterflowsim.Scenarios;
 
 public class Okno extends JPanel implements Printable {
 	
@@ -130,6 +136,7 @@ public class Okno extends JPanel implements Printable {
 
 	Cell cell;
 	
+	Cell ce ;
 	
 	/**
 	 * Promenna pro pan na ose X a na ose Y.
@@ -184,12 +191,41 @@ public class Okno extends JPanel implements Printable {
 				
 				
 				 cell = Simulator.getData()[pocitadlo];
-				//cell.isDry();
-				//	System.out.println(cell);
+				
+				 
 				if(cell.isDry()==true) {
 				//	System.out.println("Ano prosim"+startx);
-				g2.setColor(Color.lightGray);
-				g2.fill(new Rectangle2D.Double((point.getX()),(point.getY()),(deltaX*pomer),(deltaY*pomer)));
+					if(cell.getTerrainLevel()>=120&&cell.getTerrainLevel()<150) {
+					
+						g2.setColor(Color.getHSBColor(35,97, 97));
+						g2.fill(new Rectangle2D.Double((point.getX()),(point.getY()),(deltaX*pomer),(deltaY*pomer)));
+						
+					}
+					if(cell.getTerrainLevel()>100&&cell.getTerrainLevel()<120) {
+						
+						g2.setColor(Color.getHSBColor(46,97, 94));
+				
+						g2.fill(new Rectangle2D.Double((point.getX()),(point.getY()),(deltaX*pomer),(deltaY*pomer)));
+						
+					}
+					if(cell.getTerrainLevel()>85&&cell.getTerrainLevel()<=100) {
+						
+						g2.setColor(Color.getHSBColor(45,96, 91));
+						g2.fill(new Rectangle2D.Double((point.getX()),(point.getY()),(deltaX*pomer),(deltaY*pomer)));
+						
+					}
+					if(cell.getTerrainLevel()<=85) {
+					
+						g2.setColor(Color.getHSBColor(105, 93, 93));
+				
+						g2.fill(new Rectangle2D.Double((point.getX()),(point.getY()),(deltaX*pomer),(deltaY*pomer)));
+						
+					}
+					if(cell.getTerrainLevel()>=150) {
+						g2.setColor(Color.getHSBColor(0, 93, 95));
+						g2.fill(new Rectangle2D.Double((point.getX()),(point.getY()),(deltaX*pomer),(deltaY*pomer)));
+						
+					}
 				}else {
 					g2.setColor(Color.blue);
 					g2.fill(new Rectangle2D.Double((point.getX()),(point.getY()),(deltaX*pomer),(deltaY*pomer)));
@@ -201,7 +237,7 @@ public class Okno extends JPanel implements Printable {
 			YY = YY+deltaY;
 			XX=Sx;
 		}
-		
+		drawTerrain(g2);
 		drawWaterSources(g2); 
 	//	g2.draw(new Rectangle.Double(0,0,579,503));		//zobrazeni posledniho pixelu x obrazku
 	//	System.out.println("pomocna"+ pocitadlo);
@@ -217,7 +253,8 @@ public class Okno extends JPanel implements Printable {
 	
 	
 	void drawTerrain(Graphics2D g) {
-		//prazdna metoda
+		for(int i=0;i<Hlavni.ZacVoda.size();i++)
+			cell.getTerrainLevel();
 	}
 	
 	public void drawWaterLayer(Graphics2D g) {
@@ -249,7 +286,7 @@ public class Okno extends JPanel implements Printable {
 				Point2D point= model2window(point2);
 				if(upg<Hlavni.ZacVoda.size()) {
 					if((int)kk==X.get(upg) && o==Y.get(upg)) {
-						g2.setColor(Color.red);
+						
 						g2.fill(new Rectangle2D.Double((point.getX()),(point.getY()),(deltaX*pomer),(deltaY*pomer)));
 						if(!Simulator.getGradient(upg).x.equals(Double.NaN) )
 						cell = Simulator.getData()[upg1];		//tady potřebuji ten presnou pozici gradientu
@@ -330,7 +367,7 @@ public class Okno extends JPanel implements Printable {
 		g2.scale(1, -1);
 	/*	g2.setColor(Color.black);
 		g2.drawLine(0, 0, 0, 500);			//zobrazeni osy 
-			g2.drawLine(0, 0, 500, 0);			//zobrazeni osy
+		g2.drawLine(0, 0, 500, 0);			//zobrazeni osy
 	*/	//	System.out.println(name);			//jmeno vodniho toku
 		g2.setColor(Color.red);
 		
